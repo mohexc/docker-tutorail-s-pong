@@ -1,48 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: redis
   namespace: basic-k8s
   labels:
-    name: nginx
-  space: 
-    replicas: 1
-    strategy: 
-      type: Recreate
-    selector: 
-      matchLabels:
-        name: nginx
-      template:
-        metadata:
-          labels:
-            name: nginx
-        spec:
-          containers:
-          - name: nginx
-            image: 3dsinteractive/nginx:1.12
-            imagePullPolicy: Always
-            resources:
-              requests:
-                memory: 500Mi
-                cpu: 200m
-              limits:
-                memory: 1Gi
-                cpu: 500Mi
-              livenessProbe:
-                tcpSocket:
-                  port: 8080
-                initialDelaySeconds: 5
-                timeoutSeconds: 1
-                periodSeconds: 300
-              redisnessProbe:
-                tcpSocket:
-                  port: 8080
-                initialDelaySeconds: 5
-                timeoutSeconds: 1
-                periodSeconds: 30
-                failureThreshold: 5
-              ports:
-              - containerPort: 8080
-                name: ngx8080
-              -continerPort: 8443
-                name: ngx8443
+    name: redis
+space: 
+  replicas: 1
+  strategy: 
+    type: Recreate
+  selector: 
+    matchLabels:
+      name: redis
+    template:
+      metadata:
+        labels:
+          name: redis
+      spec:
+        containers:
+        - name: redis
+          image: 3dsinteractive/redis:5.0
+          imagePullPolicy: Always
+          ports:
+            - name: redis6379
+              containerPort: 6379
+          env:
+            - name: ALLOW_EMPRY_PASSWORD
+              value: "yes"
+          resources:
+            requests:
+              memory: 500Mi
+              cpu: 200m
+            limits:
+              memory: 1Gi
+              cpu: 500m
+            livenessProbe:
+              tcpSocket:
+                port: 6379
+              initialDelaySeconds: 30
+              timeoutSeconds: 1
+              periodSeconds: 300
+            redisnessProbe:
+              tcpSocket:
+                port: 6379
+              initialDelaySeconds: 30
+              timeoutSeconds: 1
+              periodSeconds: 30
+              failureThreshold: 5
+           
