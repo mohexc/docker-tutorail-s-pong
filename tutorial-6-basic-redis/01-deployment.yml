@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
-  namespace: basic-k8s
+  namespace: basic-redis
   labels:
     name: redis
-space: 
+spec:
   replicas: 1
-  strategy: 
+  strategy:
     type: Recreate
-  selector: 
+  selector:
     matchLabels:
       name: redis
-    template:
-      metadata:
-        labels:
-          name: redis
-      spec:
-        containers:
+  template:
+    metadata:
+      labels:
+        name: redis
+    spec:
+      containers:
         - name: redis
           image: 3dsinteractive/redis:5.0
           imagePullPolicy: Always
@@ -25,7 +25,7 @@ space:
             - name: redis6379
               containerPort: 6379
           env:
-            - name: ALLOW_EMPRY_PASSWORD
+            - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
           resources:
             requests:
@@ -34,17 +34,16 @@ space:
             limits:
               memory: 1Gi
               cpu: 500m
-            livenessProbe:
-              tcpSocket:
-                port: 6379
-              initialDelaySeconds: 30
-              timeoutSeconds: 1
-              periodSeconds: 300
-            redisnessProbe:
-              tcpSocket:
-                port: 6379
-              initialDelaySeconds: 30
-              timeoutSeconds: 1
-              periodSeconds: 30
-              failureThreshold: 5
-           
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 300
+          readinessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 30
+            failureThreshold: 5

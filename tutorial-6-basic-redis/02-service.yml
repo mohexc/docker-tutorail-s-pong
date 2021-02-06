@@ -1,19 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
-  namespace: basic-k8s
+  name: redis
+  namespace: basic-redis
   labels:
-    name: nginx
+    name: redis
 spec:
   selector:
-    name: nginx
+    name: redis
   ports:
-  - name: ngx8080
-    port: 8080
-    targetPort: 8080
-    portocol: TCP
-  - name: ngx8443
-    port: 8443
-    targetPort: 8443
+  - name: redis6379
+    port: 6379
+    targetPort: 6379
     protocol: TCP
+  clusterIP: None
