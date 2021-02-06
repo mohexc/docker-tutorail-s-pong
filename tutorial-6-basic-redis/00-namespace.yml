@@ -3,5 +3,5 @@ kind: Namespace
 metadata:
   name: basic-redis
   labels: 
-  name: basic-redis
-  module: Namespace
+    name: basic-redis
+    module: Namespace
